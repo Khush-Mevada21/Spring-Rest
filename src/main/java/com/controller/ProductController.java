@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,6 +67,27 @@ public class ProductController {
 			ProductEntity productEntity = op.get();
 			return productEntity;
 		}			
+	}
+	
+	@DeleteMapping("/products/{productId}")
+	public String deleteProductById(@PathVariable("productId") Integer productId)
+	{
+		Optional<ProductEntity> op = productRepository.findById(productId);
+		
+		if(op.isEmpty()){
+			return "Not Found";
+		}
+		else {
+			productRepository.deleteById(productId);
+			return "Success";
+		}
+	}
+	
+	@PutMapping("/products")
+	public String updateProducts(@RequestBody ProductEntity productEntity)
+	{
+		productRepository.save(productEntity);
+		return "Success";
 	}
 	
 }
